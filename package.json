@@ -1,0 +1,19 @@
+{
+  "name": "rayysetting-store",
+  "version": "2.0.0",
+  "description": "Store Vercel Backend",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "form-data": "^4.0.0",
+    "multer": "^1.4.5-lts.1"
+  },
+  "engines": {
+    "node": "18.x"
+  }
+}
