@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RAYYSETTING7 - Store Malaysia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-body: #050916; --bg-card: #10172d; --primary: #0050FF; --btn-red: #e64848;
+            --text-white: #ffffff; --text-gray: #aab2c8; --border: #1f2b48;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        body { background-color: var(--bg-body); color: var(--text-white); overflow-x: hidden; padding-bottom: 60px; }
+
+        /* PRELOADER */
+        #loader-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-body); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease-out, visibility 0.5s; }
+        .loader-spinner { width: 50px; height: 50px; border: 4px solid rgba(0, 80, 255, 0.2); border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
+        .loader-text { font-size: 18px; font-weight: 800; letter-spacing: 2px; color: var(--text-white); animation: pulse 1.5s ease-in-out infinite; }
+        .loader-text span.num { color: white; }
+        .loader-hidden { opacity: 0; visibility: hidden; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+        /* FAB BANTUAN */
+        .fab-container { position: fixed; bottom: 70px; right: 15px; z-index: 950; display: flex; flex-direction: column; align-items: flex-end; gap: 0; }
+        .fab-main-btn { background: white; color: #333; border-radius: 50px; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); cursor: pointer; border: none; transition: transform 0.2s; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 12px; order: 2; }
+        .fab-main-btn:active { transform: scale(0.95); }
+        .fab-main-btn i { font-size: 16px; color: #009688; }
+        .fab-menu { display: flex; flex-direction: column; gap: 8px; align-items: flex-end; opacity: 0; visibility: hidden; transform: translateY(20px); transition: all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28); pointer-events: none; margin-bottom: 10px; order: 1; }
+        .fab-container.active .fab-menu { opacity: 1; visibility: visible; transform: translateY(0); pointer-events: auto; }
+        .fab-item { background: white; color: black; padding: 6px 14px; border-radius: 8px; font-size: 11px; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); white-space: nowrap; border-left: 3px solid var(--primary); }
+        .fab-item:hover { background: #f5f5f5; }
+        .fab-wa { color: #25D366; font-size: 14px; }
+        .fab-tg { color: #229ED9; font-size: 14px; }
+
+        /* NAVBAR */
+        .navbar { background: #080c17; height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 50; }
+        .nav-logo { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .nav-logo img { width: 35px; height: 35px; border-radius: 50%; }
+        .nav-logo-text { font-size: 18px; font-weight: 800; color: var(--text-white); letter-spacing: 1px; text-transform: uppercase; }
+        .nav-logo-text span { color: var(--primary); }
+        .nav-logo-text span.num { color: #ffffff !important; }
+        .nav-icon { font-size: 24px; color: var(--text-white); cursor: pointer; padding: 5px; display: flex; align-items: center; }
+
+        /* SIDEBAR */
+        .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 99; display: none; }
+        .sidebar { position: fixed; top: 0; right: 0; width: 280px; height: 100%; background: var(--bg-card); z-index: 100; transform: translateX(100%); transition: transform 0.3s ease; border-left: 1px solid var(--border); display: flex; flex-direction: column; }
+        .sidebar.active { transform: translateX(0); }
+        .sidebar-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .menu-list { padding: 10px; overflow-y: auto; }
+        .menu-item { display: flex; align-items: center; gap: 10px; padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); color: var(--text-white); text-decoration: none; font-size: 13px; font-weight: 500; transition: 0.2s; }
+        .menu-label { font-size: 10px; color: var(--text-gray); margin-top: 2px; }
+
+        .container { max-width: 1000px; margin: 0 auto; padding: 16px; min-height: 80vh; }
+        @media (max-width: 600px) { .container { padding: 10px; } }
+
+        /* BANNER */
+        .banner { width: 100%; aspect-ratio: 20/9; background: #222; border-radius: 12px; margin-bottom: 15px; overflow: hidden; position: relative; border:1px solid var(--border); }
+        .banner img { width: 100%; height: 100%; object-fit: cover; }
+        .detail-banner { width: 100%; aspect-ratio: 3/1; background: #222; border-radius: 12px; margin-bottom: 20px; overflow: hidden; border:1px solid var(--border); position: relative; }
+        .detail-banner img { width: 100%; height: 100%; object-fit: cover; }
+
+        .running-text-container { background: rgba(0, 80, 255, 0.1); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; white-space: nowrap; margin-bottom: 20px; padding: 8px 0; }
+        .running-text { display: inline-block; padding-left: 100%; animation: marquee 15s linear infinite; font-size: 11px; font-weight: 600; color: var(--text-white); text-transform: uppercase; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+
+        /* GRID SYSTEM */
+        .section-title { font-size: 15px; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-left: 3px solid var(--primary); padding-left: 10px; }
+        .game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; }
+        @media (max-width: 600px) { .game-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 360px) { .game-grid { grid-template-columns: repeat(2, 1fr); } }
+        
+        .game-card { background: transparent; border-radius: 8px; overflow: hidden; position: relative; display: flex; flex-direction: column; border: 1px solid var(--border); }
+        .card-top { background: var(--bg-card); border-radius: 0; position: relative; overflow: hidden; }
+        .card-top img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; }
+        .card-wave { position: absolute; bottom: -1px; left: 0; width: 100%; line-height: 0; }
+        .card-wave svg { width: 100%; height: 15px; fill: #10172d; }
+        .card-content { background: #10172d; padding: 8px 5px; text-align: center; display: flex; flex-direction: column; justify-content: center; flex-grow: 1; min-height: 50px; }
+        .game-name { font-size: 10px; font-weight: 600; color: white; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.2; }
+        .game-btn-area { background: #10172d; padding: 0 5px 8px 5px; border-radius: 0 0 8px 8px; }
+        .btn-download { display: block; width: 100%; background: var(--btn-red); color: white; text-align: center; font-size: 10px; font-weight: 600; padding: 5px 0; border-radius: 4px; text-decoration: none; }
+        .btn-download i { margin-right: 4px; }
+        .platform-label { position: absolute; top: 0; right: 0; padding: 2px 6px; font-size: 8px; font-weight: 700; color: white; border-radius: 0 0 0 8px; z-index: 10; }
+        .lbl-android { background: linear-gradient(45deg, #03A9F4, #4CAF50); }
+        .lbl-ios { background: linear-gradient(45deg, #E91E63, #9C27B0); }
+
+        /* DETAIL PAGE */
+        #detail-page { display: none; }
+        .detail-header h2 { font-size: 18px; color: var(--primary); text-align: center; margin: 15px 0; font-weight: 700; text-transform: uppercase; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 15px; }
+        .tab { flex: 1; padding: 10px; text-align: center; background: var(--bg-card); border-radius: 8px; font-size: 12px; font-weight: 600; border: 1px solid var(--border); color: var(--text-gray); cursor: pointer; transition: 0.3s; }
+        .tab.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .content-area { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 15px; margin-bottom: 20px; font-size: 12px; color: #ccc; }
+        .step-box { background: var(--bg-card); border-radius: 12px; padding: 15px; margin-bottom: 15px; border: 1px solid var(--border); }
+        .step-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
+        .step-num { width: 24px; height: 24px; background: var(--primary); color: white; font-weight: bold; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+        .step-title { font-weight: 600; font-size: 13px; color: white; }
+        .input-box { width: 100%; padding: 12px; border-radius: 6px; border: 1px solid var(--border); background: #080c17; color: white; outline: none; font-size: 12px; }
+        .variant-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .variant-item { background: #080c17; border: 1px solid var(--border); border-radius: 8px; padding: 12px; cursor: pointer; transition: 0.2s; position: relative; }
+        .variant-item.selected { border-color: var(--primary); background: rgba(0, 80, 255, 0.15); }
+        .variant-name { font-size: 11px; font-weight: 600; margin-bottom: 4px; color: white; }
+        .variant-price { font-size: 12px; color: var(--primary); font-weight: 800; }
+        .pay-logos-row { display: flex; gap: 5px; align-items: center; background: white; padding: 4px 8px; border-radius: 4px; }
+        .pay-logos-row img { height: 14px; object-fit: contain; }
+
+        /* FOOTER & INFO */
+        .footer-section { background: var(--bg-card); padding: 15px 15px 0 15px; border-top: 1px solid var(--border); border-radius: 20px 20px 0 0; margin-top: 10px; }
+        .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .info-card { background: var(--bg-body); padding: 15px; border-radius: 12px; text-align: center; border: 1px solid var(--border); }
+        .info-icon svg { width: 30px; height: 30px; fill: var(--primary); margin-bottom: 5px; }
+        .info-title { font-weight: bold; font-size: 13px; margin-bottom: 2px; }
+        .info-desc { font-size: 10px; color: var(--text-gray); }
+        
+        .slider-container { margin-top: 15px; padding: 10px 0; background: rgba(255,255,255,0.05); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); width: 100%; overflow: hidden; }
+        .slider-track { display: flex; align-items: center; width: calc(100px * 12); animation: scroll 15s linear infinite; }
+        .slide { width: 100px; height: 40px; display: flex; align-items: center; justify-content: center; margin: 0 15px; }
+        .slide img { max-width: 100%; max-height: 100%; object-fit: contain; filter: grayscale(100%) brightness(200%); opacity: 0.7; transition: 0.3s; }
+        .slide img:hover { filter: grayscale(0%); opacity: 1; }
+        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(calc(-100px * 6)); } }
+
+        .sticky-footer { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--primary); height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-shadow: 0 -4px 20px rgba(0,0,0,0.5); z-index: 100; }
+        .total-price { color: white; font-weight: bold; font-size: 12px; display: flex; flex-direction: column; }
+        .total-price span { font-size: 16px; font-weight: 800; }
+        .btn-buy { background: #080c17; color: white; border: none; padding: 10px 25px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; }
+
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px); }
+        .modal-box { background: var(--bg-card); width: 100%; max-width: 400px; border-radius: 16px; padding: 20px; border: 1px solid var(--border); max-height: 90vh; overflow-y: auto; }
+        
+        /* QR ZOOM */
+        .qr-zoom-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 2000; display: none; justify-content: center; align-items: center; padding: 20px; }
+        .qr-zoom-img { max-width: 90%; max-height: 80vh; border-radius: 10px; box-shadow: 0 0 20px rgba(0,80,255,0.5); object-fit: contain; }
+        .copyright { text-align: center; font-size: 11px; color: #555; margin-top: 0; border-top: 1px solid rgba(255,255,255,0.05); padding: 15px 0; background: var(--bg-card); }
+    </style>
+</head>
+<body>
+
+    <div id="loader-wrapper">
+        <div class="loader-spinner"></div>
+        <div class="loader-text">RAYY<span>SETTING</span><span class="num">7</span></div>
+    </div>
+
+    <div class="fab-container" id="fab-container">
+        <div class="fab-menu" id="fab-menu-items">
+            <a href="http://wa.me/601173686870" target="_blank" class="fab-item"><i class="fa-brands fa-whatsapp fab-wa"></i> WhatsApp</a>
+            <a href="https://t.me/rayysetting7" target="_blank" class="fab-item"><i class="fa-brands fa-telegram fab-tg"></i> Telegram</a>
+        </div>
+        <button class="fab-main-btn" onclick="toggleFab()"><i class="fa-solid fa-headset"></i> Bantuan</button>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-logo" onclick="goHome(true)">
+            <img src="images/logo-profil.png" alt="Logo" onerror="this.src='https://placehold.co/50x50/0050FF/ffffff?text=R7'">
+            <div class="nav-logo-text">RAYY<span>SETTING</span><span class="num">7</span></div>
+        </div>
+        <div class="nav-icon" onclick="toggleMenu()">
+            <svg style="width:24px;height:24px;fill:white;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+        </div>
+    </nav>
+
+    <div class="sidebar-overlay" onclick="toggleMenu()"></div>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-title" style="color:var(--primary)">MENU UTAMA</div>
+            <div onclick="toggleMenu()" style="font-size:24px;cursor:pointer;">&times;</div>
+        </div>
+        <div class="menu-list" id="sidebar-menu"></div>
+    </div>
+
+    <div class="container">
+        <div id="home-page">
+            <div class="banner">
+                <img src="images/banner.jpg" alt="Banner" onerror="this.src='https://placehold.co/600x200/222/0050FF?text=BANNER+RAYYSETTING7'">
+            </div>
+            <div class="running-text-container">
+                <div class="running-text">MENYEDIAKAN VOUCHER & FAIL MOD PERMAINAN — PROSES AUTOMATIK 24 JAM — SELAMAT & DIPERCAYAI</div>
+            </div>
+            <div class="section-title">🔥 PILIH KATEGORI</div>
+            <div id="category-list" class="game-grid"></div>
+            <div style="margin-top:40px;">
+                <div class="section-title">Kenapa Pilih Kami?</div>
+                <div class="info-grid">
+                    <div class="info-card"><div class="info-icon"><svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></div><div class="info-title">Harga Terendah</div><div class="info-desc">Jaminan harga terbaik</div></div>
+                    <div class="info-card"><div class="info-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg></div><div class="info-title">Proses Automatik</div><div class="info-desc">Penghantaran 24 Jam</div></div>
+                </div>
+            </div>
+            <div class="footer-section">
+                <div class="nav-logo" style="margin-bottom:15px;">
+                    <img src="images/logo-profil.png" alt="Logo" onerror="this.src='https://placehold.co/50x50/0050FF/ffffff?text=R7'">
+                    <div class="nav-logo-text">RAYY<span>SETTING</span><span class="num">7</span></div>
+                </div>
+                <p style="font-size:11px; color:var(--text-gray); line-height:1.6;">RAYY SETTING 7 adalah platform penyedia fail skrip, mod menu, dan keperluan permainan mudah alih.</p>
+                <div id="footer-socials" style="margin-top:15px;"></div>
+                <div class="section-title" style="font-size:14px; margin-top:25px;">Kaedah Pembayaran</div>
+                <div class="slider-container">
+                    <div class="slider-track">
+                        <div class="slide"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Maybank_Logo.svg/1200px-Maybank_Logo.svg.png"></div>
+                        <div class="slide"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/CIMB_Logo.svg/1200px-CIMB_Logo.svg.png"></div>
+                        <div class="slide"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Touch_%27n_Go_eWallet_logo.svg/1200px-Touch_%27n_Go_eWallet_logo.svg.png"></div>
+                        <div class="slide"><img src="https://upload.wikimedia.org/wikipedia/commons/e/ee/Shopee_logo.svg"></div>
+                        <div class="slide"><img src="https://www.duitnow.my/brand/assets/images/duitnow_logo.png"></div>
+                    </div>
+                </div>
+                <div class="copyright">Hak Cipta Terpelihara &copy; 2025 RAYY SETTING 7 Malaysia.</div>
+            </div>
+        </div>
+
+        <div id="detail-page">
+            <div class="back-btn" onclick="goHome(true)">← Kembali</div>
+            <div class="detail-header"><h2 id="d-category-name">...</h2></div>
+            <div class="detail-banner">
+                <img src="images/banner.jpg" alt="Detail Banner" onerror="this.src='https://placehold.co/600x200/222/0050FF?text=PRODUK+PREMIUM'">
+            </div>
+            <div class="tabs">
+                <div class="tab active" id="tab-desc" onclick="switchTab('desc')">Keterangan</div>
+                <div class="tab" id="tab-video" onclick="switchTab('video')">Video / Testimoni</div>
+            </div>
+            <div id="desc-area" class="content-area"><strong>Deskripsi Produk:</strong><span id="d-desc-text">...</span></div>
+            <div id="video-area" class="content-area" style="display:none; text-align:center;">
+                <div style="margin-bottom:10px; font-weight:bold; color:var(--primary);">BUKTI TESTIMONI</div>
+                <div class="testi-grid" id="testi-list"></div>
+            </div>
+            <div class="step-box">
+                <div class="step-header"><div class="step-num">1</div><div class="step-title">Masukkan Nama / ID</div></div>
+                <input type="text" id="user_id" class="input-box" placeholder="Masukkan Nama Anda">
+            </div>
+            <div class="step-box">
+                <div class="step-header"><div class="step-num">2</div><div class="step-title">Pilih Pakej</div></div>
+                <div id="variant-list" class="variant-grid"></div>
+            </div>
+            <div class="step-box">
+                <div class="step-header"><div class="step-num">3</div><div class="step-title">Kaedah Pembayaran</div></div>
+                <div style="background:#080c17; padding:12px; border:1px solid #fff; border-radius:8px; color:white; font-size:12px; font-weight:bold; display:flex; justify-content:space-between; align-items:center;">
+                    <div style="display:flex; flex-direction:column; gap:5px;"><span>DuitNow QR / FPX</span><div class="pay-logos-row"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Maybank_Logo.svg/1200px-Maybank_Logo.svg.png"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/CIMB_Logo.svg/1200px-CIMB_Logo.svg.png"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Touch_%27n_Go_eWallet_logo.svg/1200px-Touch_%27n_Go_eWallet_logo.svg.png"><img src="https://www.duitnow.my/brand/assets/images/duitnow_logo.png"></div></div>
+                    <span style="background:white; color:black; padding:2px 6px; font-size:10px; border-radius:4px;">AUTO</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="sticky-footer" class="sticky-footer" style="display:none;">
+        <div class="total-price">Jumlah<span id="display-price">RM 0</span></div>
+        <button onclick="openUploadModal()" class="btn-buy">BELI SEKARANG</button>
+    </div>
+
+    <div id="uploadModal" class="modal-overlay">
+        <div class="modal-box">
+            <h3 style="text-align:center; margin-bottom:15px; color:var(--primary);">Imbas Pembayaran</h3>
+            <div style="text-align:center; background:white; padding:10px; border-radius:8px; margin-bottom:15px; cursor:zoom-in;">
+                <p style="color:black; font-size:10px; margin-bottom:5px;">(Klik QR untuk Zoom)</p>
+                <img src="images/qris.jpg" style="width:150px; height:150px;" onclick="zoomQR(this)" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=DUITNOW_ERROR'">
+            </div>
+            <p style="text-align:center; font-size:12px; margin-bottom:10px;">Item: <span id="m-item" style="color:white">-</span></p>
+            <form id="paymentForm" onsubmit="submitToWA(event)">
+                <input type="hidden" id="wa_item" name="item_name"><input type="hidden" id="wa_price" name="item_price"><input type="hidden" id="wa_url" name="website_url">
+                <input type="file" name="payment_proof" accept="image/*" class="input-box" required style="margin-bottom:10px;">
+                <div style="display:flex; gap:10px;">
+                    <button type="button" onclick="document.getElementById('uploadModal').style.display='none'" class="btn-buy" style="background:#333; color:white; flex:1;">Batal</button>
+                    <button type="submit" id="btn-submit" class="btn-buy" style="background:var(--primary); color:white; flex:1;">Hantar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="qrZoomModal" class="qr-zoom-overlay" onclick="closeZoomQR()">
+        <img id="zoomed-qr" src="" class="qr-zoom-img">
+    </div>
+
+    <script>
+        window.addEventListener("load", function() {
+            const loader = document.getElementById("loader-wrapper");
+            setTimeout(function() {
+                loader.classList.add("loader-hidden");
+                loader.addEventListener("transitionend", function() { loader.remove(); });
+            }, 800);
+            const hash = window.location.hash.substring(1);
+            if(hash) window.pendingCategory = decodeURIComponent(hash);
+        });
+
+        window.onpopstate = function(event) {
+            if(!window.location.hash) goHome(false);
+            else {
+                const catName = decodeURIComponent(window.location.hash.substring(1));
+                if(allData[catName]) openCategory(catName, false);
+            }
+        };
+
+        function toggleFab() { document.getElementById('fab-container').classList.toggle('active'); }
+
+        let allData = {};
+        let currentCategory = "";
+        let selectedVariant = null;
+
+        fetch('/api/data').then(res => res.json()).then(data => {
+            allData = data.categories; 
+            const catList = document.getElementById('category-list');
+            
+            for (const [catName, items] of Object.entries(allData)) {
+                // LOGIC AUTO IMAGE jika data.json kosong
+                let catImg = items[0].image || '';
+                const lowerCat = catName.toLowerCase();
+
+                if(!catImg) {
+                     if(lowerCat.includes('iphone') || lowerCat.includes('ios')) catImg = 'images/iphone.jpg';
+                     else if(lowerCat.includes('android')) {
+                        if(lowerCat.includes('aim') || lowerCat.includes('head')) catImg = 'images/aimhead.jpg';
+                        else if(lowerCat.includes('injector')) catImg = 'images/injector.jpg';
+                        else if(lowerCat.includes('sensix')) catImg = 'images/sensix.jpg';
+                        else if(lowerCat.includes('drip')) catImg = 'images/drip.jpg';
+                        else if(lowerCat.includes('hg')) catImg = 'images/hgcheat.jpg';
+                        else catImg = 'images/android.jpg';
+                     } else if(lowerCat.includes('headlock')) catImg = 'images/headlock.jpg';
+                     else catImg = 'https://placehold.co/100x100?text=GAME';
+                }
+
+                let badgeHtml = '';
+                if(lowerCat.includes('iphone') || lowerCat.includes('ios')) badgeHtml = '<div class="platform-label lbl-ios">iOS</div>';
+                else if(lowerCat.includes('android')) badgeHtml = '<div class="platform-label lbl-android">Android</div>';
+
+                catList.innerHTML += `<div class="game-card" onclick="openCategory('${catName}', true)">${badgeHtml}
+                        <div class="card-top"><img src="${catImg}" onerror="this.src='https://placehold.co/100x100?text=IMG'">
+                            <div class="card-wave"><svg viewBox="0 0 1440 320" preserveAspectRatio="none"><path d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,224C672,245,768,267,864,261.3C960,256,1056,224,1152,197.3C1248,171,1344,149,1392,138.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg></div>
+                        </div>
+                        <div class="card-content"><div class="game-name">${catName}</div></div>
+                        <div class="game-btn-area"><a class="btn-download"><i class="fa fa-download"></i> BELI</a></div></div>`;
+            }
+            loadContacts(data.config.contacts);
+            if(window.pendingCategory && allData[window.pendingCategory]) openCategory(window.pendingCategory, false);
+        });
+
+        function loadContacts(contacts) {
+            const sidebarMenu = document.getElementById('sidebar-menu');
+            const footerSocials = document.getElementById('footer-socials');
+            sidebarMenu.innerHTML = ''; footerSocials.innerHTML = ''; 
+            contacts.forEach(contact => {
+                let iconSvg = ''; let color = '#fff'; 
+                if(contact.type === 'wa') {
+                    color = '#25D366'; 
+                    iconSvg = '<path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2Z"/>';
+                    footerSocials.innerHTML += `<a href="${contact.url}" class="social-btn btn-wa" style="display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:8px;background:#25D366;color:white;text-decoration:none;font-weight:bold;margin-right:10px;"><svg style="width:16px;height:16px;fill:white" viewBox="0 0 24 24">${iconSvg}</svg> Whatsapp</a>`;
+                } else if(contact.type === 'tg') {
+                    color = '#229ED9'; 
+                    iconSvg = '<path d="M9.78 18.65L10.03 14.39L17.85 7.33C18.19 7.03 17.77 6.86 17.33 7.13L7.67 13.21L3.54 11.92C2.64 11.64 2.63 11.02 3.74 10.59L19.9 4.36C20.65 4.09 21.31 4.54 21.06 5.68L18.3 18.68C18.09 19.63 17.5 19.86 16.69 19.41L12.5 16.32L10.47 18.27C10.25 18.49 10.06 18.65 9.78 18.65Z"/>';
+                    footerSocials.innerHTML += `<a href="${contact.url}" class="social-btn btn-tele" style="display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:8px;background:#229ED9;color:white;text-decoration:none;font-weight:bold;"><svg style="width:16px;height:16px;fill:white" viewBox="0 0 24 24">${iconSvg}</svg> Telegram</a>`;
+                } else {
+                    color = '#ffffff';
+                    iconSvg = '<path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/>';
+                }
+                sidebarMenu.innerHTML += `<a href="${contact.url}" class="menu-item"><svg style="width:16px;height:16px;fill:${color}" viewBox="0 0 24 24">${iconSvg}</svg><div><div>${contact.title}</div>${contact.label ? `<div class="menu-label">${contact.label}</div>` : ''}</div></a>`;
+            });
+        }
+
+        function zoomQR(img) { document.getElementById('zoomed-qr').src = img.src; document.getElementById('qrZoomModal').style.display = 'flex'; }
+        function closeZoomQR() { document.getElementById('qrZoomModal').style.display = 'none'; }
+        function toggleMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            if(sidebar.classList.contains('active')) { sidebar.classList.remove('active'); overlay.style.display = 'none'; } 
+            else { sidebar.classList.add('active'); overlay.style.display = 'block'; }
+        }
+        function switchTab(t) {
+            const td = document.getElementById('tab-desc'), tv = document.getElementById('tab-video');
+            const ad = document.getElementById('desc-area'), av = document.getElementById('video-area');
+            if(t==='desc'){ td.classList.add('active'); tv.classList.remove('active'); ad.style.display='block'; av.style.display='none'; }
+            else { td.classList.remove('active'); tv.classList.add('active'); ad.style.display='none'; av.style.display='block'; }
+        }
+        function openCategory(catName, pushToHistory = true) {
+            currentCategory = catName;
+            if(pushToHistory) history.pushState({page: 'detail', cat: catName}, "", "#" + catName);
+            document.getElementById('home-page').style.display = 'none';
+            document.getElementById('detail-page').style.display = 'block';
+            document.getElementById('sticky-footer').style.display = 'flex';
+            document.getElementById('d-category-name').innerText = catName;
+            switchTab('desc');
+            document.getElementById('d-desc-text').innerHTML = "<i>Sila pilih pakej di bawah.</i>";
+            const items = allData[catName];
+            const vList = document.getElementById('variant-list');
+            vList.innerHTML = '';
+            items.forEach(item => {
+                const desc = item.deskripsiPanjang ? item.deskripsiPanjang.replace(/\|\|/g, '<br>') : "-";
+                vList.innerHTML += `<div class="variant-item" onclick="selectVariant(this, '${item.nama}', ${item.harga}, \`${desc}\`)"><div class="variant-name">${item.nama}</div><div class="variant-price">RM ${item.harga}</div></div>`;
+            });
+            window.scrollTo(0, 0);
+        }
+        function selectVariant(el, name, price, desc) {
+            document.querySelectorAll('.variant-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedVariant = { name, price };
+            document.getElementById('display-price').innerText = "RM " + price;
+            document.getElementById('d-desc-text').innerHTML = desc;
+            switchTab('desc');
+        }
+        function goHome(pushToHistory = true) {
+            if(pushToHistory) history.pushState({page: 'home'}, "", window.location.pathname);
+            document.getElementById('home-page').style.display = 'block';
+            document.getElementById('detail-page').style.display = 'none';
+            document.getElementById('sticky-footer').style.display = 'none';
+            window.scrollTo(0, 0);
+        }
+        function openUploadModal() {
+            if(!selectedVariant || !document.getElementById('user_id').value) { alert('Sila lengkapkan maklumat!'); return; }
+            const full = `${currentCategory} - ${selectedVariant.name} (${document.getElementById('user_id').value})`;
+            document.getElementById('m-item').innerText = full;
+            document.getElementById('wa_item').value = full;
+            document.getElementById('wa_price').value = "RM " + selectedVariant.price;
+            document.getElementById('wa_url').value = window.location.href;
+            document.getElementById('uploadModal').style.display = 'flex';
+        }
+        function submitToWA(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-submit');
+            btn.innerText = 'Menghantar...';
+            fetch('api.php', { method:'POST', body: new FormData(document.getElementById('paymentForm')) })
+            .then(res=>res.json()).then(d=>{ window.location.href=d.whatsapp_url; })
+            .catch(e=>{ alert('Gagal menghantar (Perlukan Server PHP/Node)'); btn.innerText='Hantar'; });
+        }
+    </script>
+</body>
+</html>

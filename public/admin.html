@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin - RayySetting7</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --bg-body: #0f172a; --bg-card: #1e293b; --bg-input: #334155; --primary: #3b82f6; --text-main: #f8fafc; --text-muted: #94a3b8; --border: #334155; --success: #10b981; --danger: #ef4444; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; outline: none; }
+        body { background-color: var(--bg-body); color: var(--text-main); font-size: 14px; }
+        
+        #login-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 9999; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+        .login-box { background: var(--bg-card); padding: 30px; border-radius: 16px; border: 1px solid var(--border); width: 100%; max-width: 350px; text-align: center; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; display: none; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+        .admin-grid { display: grid; grid-template-columns: 350px 1fr; gap: 20px; }
+        @media(max-width: 900px) { .admin-grid { grid-template-columns: 1fr; } }
+        .card { background: var(--bg-card); padding: 20px; border-radius: 12px; border: 1px solid var(--border); }
+        label { display: block; margin-bottom: 6px; font-weight: 500; font-size: 12px; color: var(--text-muted); }
+        input, select, textarea { width: 100%; background: var(--bg-input); border: 1px solid var(--border); color: white; padding: 12px; border-radius: 8px; margin-bottom: 15px; }
+        .btn { width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; justify-content: center; gap: 8px; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-success { background: var(--success); color: white; }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-muted); }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 12px; background: rgba(255,255,255,0.03); font-size: 11px; text-transform: uppercase; color: var(--text-muted); }
+        td { padding: 12px; border-bottom: 1px solid var(--border); }
+        .badge-blue { background: rgba(59, 130, 246, 0.2); color: #60a5fa; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div id="login-overlay">
+        <div class="login-box">
+            <h2 style="color:var(--primary); margin-bottom:20px;">ADMIN ACCESS</h2>
+            <form onsubmit="doLogin(event)">
+                <input type="password" id="login-pass" placeholder="Password..." required style="text-align:center;">
+                <button type="submit" class="btn btn-primary">MASUK PANEL</button>
+            </form>
+            <p id="login-msg" style="color:var(--danger); font-size:12px; margin-top:10px;"></p>
+        </div>
+    </div>
+
+    <div class="container" id="main-panel">
+        <div class="header">
+            <h1>ADMIN <span>PANEL</span></h1>
+            <button onclick="saveChanges()" class="btn btn-success" style="width:auto; padding:10px 20px;"><i class="fa-solid fa-cloud-arrow-up"></i> SIMPAN KE GITHUB</button>
+        </div>
+        <div class="admin-grid">
+            <div class="card">
+                <h3 style="margin-bottom:15px; border-bottom:1px solid var(--border); padding-bottom:10px;">EDITOR</h3>
+                <input type="hidden" id="edit-category"><input type="hidden" id="edit-index">
+                <label>Kategori</label><select id="inp-category" onchange="renderTable()"></select>
+                <label>Nama Produk</label><input type="text" id="inp-name">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                    <div><label>Harga (RM)</label><input type="number" id="inp-price"></div>
+                    <div><label>Harga Coret</label><input type="number" id="inp-original"></div>
+                </div>
+                <label>Deskripsi (Pemisah || )</label><textarea id="inp-desc" rows="3"></textarea>
+                <label>Gambar</label>
+                <div style="display:flex; gap:5px; margin-bottom:15px;">
+                    <input type="text" id="inp-image" placeholder="URL..." style="margin-bottom:0;">
+                    <input type="file" id="file-upload" accept="image/*" style="display:none;" onchange="uploadImage()">
+                    <button onclick="document.getElementById('file-upload').click()" class="btn btn-primary" style="width:auto;"><i class="fa-solid fa-upload"></i></button>
+                </div>
+                <div style="display:flex; gap:10px;">
+                    <button id="btn-add" onclick="addProduct()" class="btn btn-primary">Tambah</button>
+                    <button id="btn-update" onclick="updateProduct()" class="btn btn-success" style="display:none;">Update</button>
+                    <button onclick="resetForm()" class="btn btn-outline">Reset</button>
+                </div>
+            </div>
+            <div class="card">
+                <h3 style="margin-bottom:15px; border-bottom:1px solid var(--border); padding-bottom:10px;">DAFTAR PRODUK</h3>
+                <div style="overflow-x:auto;">
+                    <table>
+                        <thead><tr><th>Img</th><th>Nama</th><th>Harga</th><th>Aksi</th></tr></thead>
+                        <tbody id="table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let fullData = {};
+
+        async function doLogin(e) {
+            e.preventDefault();
+            const pass = document.getElementById('login-pass').value;
+            try {
+                const res = await fetch('/api/login', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({password: pass}) });
+                if(res.ok) { document.getElementById('login-overlay').style.display='none'; document.getElementById('main-panel').style.display='block'; loadData(); }
+                else document.getElementById('login-msg').innerText = "Password Salah!";
+            } catch(e) { alert('Error Server'); }
+        }
+
+        async function loadData() {
+            try {
+                const res = await fetch('/api/data');
+                fullData = await res.json();
+                const catSelect = document.getElementById('inp-category');
+                catSelect.innerHTML = '';
+                Object.keys(fullData.categories).forEach(cat => {
+                    const opt = document.createElement('option');
+                    opt.value = cat; opt.innerText = cat;
+                    catSelect.appendChild(opt);
+                });
+                renderTable();
+            } catch(e) { alert('Gagal memuat data dari GitHub'); }
+        }
+
+        function renderTable() {
+            const cat = document.getElementById('inp-category').value;
+            const tbody = document.getElementById('table-body');
+            tbody.innerHTML = '';
+            if(!fullData.categories[cat]) return;
+            fullData.categories[cat].forEach((item, idx) => {
+                const img = item.image || 'https://placehold.co/30';
+                tbody.innerHTML += `<tr>
+                    <td><img src="${img}" style="width:30px;height:30px;border-radius:4px;"></td>
+                    <td>${item.nama}</td>
+                    <td><span class="badge-blue">RM ${item.harga}</span></td>
+                    <td style="display:flex;gap:5px;">
+                        <button class="btn btn-primary" style="padding:5px;width:auto;" onclick="editMode('${cat}', ${idx})"><i class="fa-solid fa-pen"></i></button>
+                        <button class="btn btn-danger" style="padding:5px;width:auto;" onclick="deleteItem('${cat}', ${idx})"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                </tr>`;
+            });
+        }
+
+        async function uploadImage() {
+            const file = document.getElementById('file-upload').files[0];
+            if(!file) return;
+            const fd = new FormData(); fd.append('image', file);
+            const btn = document.querySelector('.fa-upload').parentElement;
+            btn.innerHTML = '...';
+            try {
+                const res = await fetch('/api/upload', {method:'POST', body:fd});
+                const d = await res.json();
+                if(d.status==='success') document.getElementById('inp-image').value = d.url;
+            } catch(e) { alert('Gagal Upload'); }
+            btn.innerHTML = '<i class="fa-solid fa-upload"></i>';
+        }
+
+        function addProduct() {
+            const cat = document.getElementById('inp-category').value;
+            const item = {
+                id: Date.now(),
+                nama: document.getElementById('inp-name').value,
+                harga: parseInt(document.getElementById('inp-price').value),
+                hargaAsli: parseInt(document.getElementById('inp-original').value)||0,
+                image: document.getElementById('inp-image').value,
+                deskripsiPanjang: document.getElementById('inp-desc').value
+            };
+            if(!item.nama) return alert('Nama wajib diisi');
+            fullData.categories[cat].push(item);
+            renderTable(); resetForm();
+        }
+
+        function editMode(cat, idx) {
+            const item = fullData.categories[cat][idx];
+            document.getElementById('edit-category').value = cat;
+            document.getElementById('edit-index').value = idx;
+            document.getElementById('inp-name').value = item.nama;
+            document.getElementById('inp-price').value = item.harga;
+            document.getElementById('inp-original').value = item.hargaAsli||0;
+            document.getElementById('inp-image').value = item.image||'';
+            document.getElementById('inp-desc').value = item.deskripsiPanjang||'';
+            document.getElementById('btn-add').style.display = 'none';
+            document.getElementById('btn-update').style.display = 'flex';
+        }
+
+        function updateProduct() {
+            const cat = document.getElementById('edit-category').value;
+            const idx = document.getElementById('edit-index').value;
+            fullData.categories[cat][idx].nama = document.getElementById('inp-name').value;
+            fullData.categories[cat][idx].harga = parseInt(document.getElementById('inp-price').value);
+            fullData.categories[cat][idx].hargaAsli = parseInt(document.getElementById('inp-original').value);
+            fullData.categories[cat][idx].image = document.getElementById('inp-image').value;
+            fullData.categories[cat][idx].deskripsiPanjang = document.getElementById('inp-desc').value;
+            renderTable(); resetForm();
+        }
+
+        function deleteItem(cat, idx) {
+            if(confirm('Hapus?')) { fullData.categories[cat].splice(idx, 1); renderTable(); }
+        }
+
+        function resetForm() {
+            document.getElementById('inp-name').value = '';
+            document.getElementById('inp-price').value = '';
+            document.getElementById('inp-original').value = '';
+            document.getElementById('inp-image').value = '';
+            document.getElementById('inp-desc').value = '';
+            document.getElementById('btn-add').style.display = 'flex';
+            document.getElementById('btn-update').style.display = 'none';
+        }
+
+        async function saveChanges() {
+            const btn = document.querySelector('.btn-success');
+            const txt = btn.innerHTML;
+            btn.innerHTML = 'Menyimpan...';
+            try {
+                const res = await fetch('/api/save', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(fullData)});
+                const d = await res.json();
+                alert(d.message);
+            } catch(e) { alert('Gagal update ke GitHub'); }
+            btn.innerHTML = txt;
+        }
+    </script>
+</body>
+</html>

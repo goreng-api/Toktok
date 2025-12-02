@@ -1,0 +1,66 @@
+{
+  "config": {
+    "brand_name": "RAYYSETTING",
+    "contacts": [
+      { "title": "NOMBOR UTAMA", "label": "Admin Support 1", "url": "http://wa.me/601173686870", "type": "wa" },
+      { "title": "NOMBOR KEDUA", "label": "Admin Support 2", "url": "http://wa.me/60175887357", "type": "wa" },
+      { "title": "TELEGRAM", "label": "Join Channel", "url": "https://t.me/rayysetting7", "type": "tg" },
+      { "title": "GROUP FILE V1", "url": "https://chat.whatsapp.com/BojXBO64zsbI4entCNSbNO", "type": "group" },
+      { "title": "GROUP FILE V2", "url": "https://chat.whatsapp.com/Bq4CwsN1N3e9DNyQzOnWze", "type": "group" },
+      { "title": "CHANNEL WHATSAPP", "url": "https://whatsapp.com/channel/0029VbAVfx15vKAA3VX6hf2u", "type": "channel" }
+    ]
+  },
+  "categories": {
+    "iPHONE": [
+        { "id": 1, "nama": "SET iOS PEPENG", "harga": 4, "hargaAsli": 6, "deskripsiPanjang": "©RAYYSETTING7-RS7" },
+        { "id": 2, "nama": "SET iOS PEPENG/SPAM (new)", "harga": 10, "hargaAsli": 10, "deskripsiPanjang": "©RAYYSETTING7-RS7" },
+        { "id": 3, "nama": "HEADTRICK V2", "harga": 10, "hargaAsli": 10, "deskripsiPanjang": "©RAYYSETTING7-RS7" },
+        { "id": 4, "nama": "EASY DRAG", "harga": 10, "hargaAsli": 10, "deskripsiPanjang": "©RAYYSETTING7-RS7" },
+        { "id": 5, "nama": "AIM DRAG V1", "harga": 25, "hargaAsli": 25, "deskripsiPanjang": "©RAYYSETTING7-RS7" },
+        { "id": 6, "nama": "AIM DRAG V2", "harga": 35, "hargaAsli": 35, "deskripsiPanjang": "©RAYYSETTING7-RS7" }
+    ],
+    "ANDROID": [
+        { "id": 9, "nama": "SET ANDRO", "harga": 5, "hargaAsli": 5, "deskripsiPanjang": "©RAYYSETTING7-RS7" },
+        { "id": 10, "nama": "STABILIZER x AIMLOCK", "harga": 6, "hargaAsli": 6, "deskripsiPanjang": "©RAYYSETTING7-RS7" },
+        { "id": 12, "nama": "SMOOTH DRAG", "harga": 10, "hargaAsli": 10, "deskripsiPanjang": "©RAYYSETTING7-RS7" }
+    ],
+    "AIM HEAD ANDROID": [
+        { "id": 18, "nama": "AIM HEAD 55%", "harga": 5, "hargaAsli": 5, "deskripsiPanjang": "SEMAKIN TINGGI “%” AIM AKAN SEMAKIN GACOR !! ||  || ©RAYYSETTING7-RS7" },
+        { "id": 19, "nama": "AIM HEAD 65%", "harga": 15, "hargaAsli": 15, "deskripsiPanjang": "SEMAKIN TINGGI “%” AIM AKAN SEMAKIN GACOR !! ||  || ©RAYYSETTING7-RS7" },
+        { "id": 20, "nama": "AIM HEAD 75%", "harga": 25, "hargaAsli": 25, "deskripsiPanjang": "SEMAKIN TINGGI “%” AIM AKAN SEMAKIN GACOR !! ||  || ©RAYYSETTING7-RS7" },
+        { "id": 21, "nama": "AIM HEAD 85%", "harga": 35, "hargaAsli": 35, "deskripsiPanjang": "SEMAKIN TINGGI “%” AIM AKAN SEMAKIN GACOR !! ||  || ©RAYYSETTING7-RS7" }
+    ],
+    "iNJECTOR ANDROID": [
+        { "id": 22, "nama": "1 HARI", "harga": 3, "hargaAsli": 3, "deskripsiPanjang": "©RAYYSETTING7-RS7" },
+        { "id": 23, "nama": "3 HARI", "harga": 6, "hargaAsli": 6, "deskripsiPanjang": "©RAYYSETTING7-RS7" },
+        { "id": 24, "nama": "7 HARI", "harga": 10, "hargaAsli": 10, "deskripsiPanjang": "©RAYYSETTING7-RS7" },
+        { "id": 25, "nama": "15 HARI", "harga": 18, "hargaAsli": 18, "deskripsiPanjang": "©RAYYSETTING7-RS7" },
+        { "id": 26, "nama": "20 HARI", "harga": 20, "hargaAsli": 20, "deskripsiPanjang": "©RAYYSETTING7-RS7" },
+        { "id": 27, "nama": "30 HARI", "harga": 25, "hargaAsli": 25, "deskripsiPanjang": "©RAYYSETTING7-RS7" },
+        { "id": 28, "nama": "60 HARI", "harga": 45, "hargaAsli": 45, "deskripsiPanjang": "©RAYYSETTING7-RS7" }
+    ],
+    "MOD MENU iPHONE (fluorite)": [
+        { "id": 29, "nama": "1 DAY", "harga": 15, "hargaAsli": 15, "deskripsiPanjang": "FITUR MOD MENU iOS (fluorite) || • auto headshot || • enemy esp || • no recoil || • hide when rec/ss || • no fps limit || • ⁠ice wall terbalik" },
+        { "id": 30, "nama": "7 DAY", "harga": 45, "hargaAsli": 45, "deskripsiPanjang": "FITUR MOD MENU iOS (fluorite) || • auto headshot || • enemy esp || • no recoil || • hide when rec/ss || • no fps limit || • ⁠ice wall terbalik" },
+        { "id": 31, "nama": "31 DAY", "harga": 95, "hargaAsli": 95, "deskripsiPanjang": "FITUR MOD MENU iOS (fluorite) || • auto headshot || • enemy esp || • no recoil || • hide when rec/ss || • no fps limit || • ⁠ice wall terbalik" },
+        { "id": 32, "nama": "GBOX 1 TAHUN (wajib beli)", "harga": 45, "hargaAsli": 45, "deskripsiPanjang": "KEGUNAAN GBOX iOS || • boleh pasang app mod / IPA tanpa Jailbreak. || • boleh install mod free fire ios. || • ⁠cara paling senang & selamat untuk pasang app luar dari App Store di iOS tanpa jailbreak dan tanpa PC. || • ⁠boleh guna untuk install mod free fire, spotify mod, youtube mod dan sebagainya lagi mod yang lain." }
+    ],
+    "MOD MENU ANDROID (drip client)": [
+        { "id": 33, "nama": "1 DAY", "harga": 15, "hargaAsli": 15, "deskripsiPanjang": "©RAYYSETTING7-RS7" },
+        { "id": 34, "nama": "7 DAY", "harga": 45, "hargaAsli": 45, "deskripsiPanjang": "©RAYYSETTING7-RS7" },
+        { "id": 35, "nama": "30 DAY", "harga": 80, "hargaAsli": 80, "deskripsiPanjang": "©RAYYSETTING7-RS7" }
+    ],
+    "Ui SENSIX ANDROID": [
+        { "id": 40, "nama": "STANDARD 90%", "harga": 5, "hargaAsli": 5, "deskripsiPanjang": "% itu adalah kelicinan screen supaya drag menjadi lebih ringan dan meningkatkan performance, semakin tinggi % performance dan tahap kelicinan itu semakin tinggi." },
+        { "id": 38, "nama": "HIGH 135%", "harga": 15, "hargaAsli": 15, "deskripsiPanjang": "% itu adalah kelicinan screen supaya drag menjadi lebih ringan dan meningkatkan performance, semakin tinggi % performance dan tahap kelicinan itu semakin tinggi." },
+        { "id": 37, "nama": "ULTRA 190%", "harga": 25, "hargaAsli": 25, "deskripsiPanjang": "% itu adalah kelicinan screen supaya drag menjadi lebih ringan dan meningkatkan performance, semakin tinggi % performance dan tahap kelicinan itu semakin tinggi." },
+        { "id": 36, "nama": "EXTREME 270%", "harga": 35, "hargaAsli": 35, "deskripsiPanjang": "% itu adalah kelicinan screen supaya drag menjadi lebih ringan dan meningkatkan performance, semakin tinggi % performance dan tahap kelicinan itu semakin tinggi." }
+    ],
+    "MOD MENU ANDROID (hg cheats)": [
+        { "id": 41, "nama": "1 DAY", "harga": 10, "hargaAsli": 10, "deskripsiPanjang": "©RAYYSETTING7-RS7" },
+        { "id": 42, "nama": "10 DAY", "harga": 25, "hargaAsli": 25, "deskripsiPanjang": "©RAYYSETTING7-RS7" },
+        { "id": 43, "nama": "20 DAY", "harga": 35, "hargaAsli": 35, "deskripsiPanjang": "©RAYYSETTING7-RS7" },
+        { "id": 44, "nama": "30 DAY", "harga": 65, "hargaAsli": 65, "deskripsiPanjang": "©RAYYSETTING7-RS7" }
+    ]
+  }
+}
